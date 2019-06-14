@@ -20,12 +20,13 @@ struct vertice
    char time[50];
    char gFilme[50];
    char fMusica[50];
+   char comida[50];
    int numA;//numero de arestas desse vertice
    Aresta* cab;
 };
 
 struct grafo{
-	
+
     int num_vertices;
     Vertice *v;
 
@@ -47,6 +48,7 @@ Grafo* criaGrafo(int v){
       g->v[i].gFilme = "\0";
       g->v[i].gMusica = "\0";
       g->v[i].numA = 0;
+      g->v[i].comida = "\0";
     }
     
     return g;

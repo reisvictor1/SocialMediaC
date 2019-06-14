@@ -56,8 +56,8 @@ float * geraPeso(vertice * A, vertice * B)
 
 int getAmigoSimi(vertice * A, vertice * B)
 {	
-	NO_lista * aux =  A.lista.cab;
-	NO_lista * cmp;
+	aresta * aux =  A.lista.cab;
+	aresta * cmp;
 	int count = 0;
 	while(aux != NULL)
 	{
@@ -66,7 +66,7 @@ int getAmigoSimi(vertice * A, vertice * B)
 			cmp = B.lista.cab;
 			while(cmp != NULL)
 			{
-				if (aux.ID ==  cpm.ID)
+				if (aux.v ==  cpm.v)
 				{
 					if (saoAmigos(cmp))
 					{
@@ -77,7 +77,7 @@ int getAmigoSimi(vertice * A, vertice * B)
 				cmp = cmp->prox;
 			}
 		}
-
+		
 		aux = aux->prox;
 	}
 

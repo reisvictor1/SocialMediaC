@@ -15,9 +15,6 @@ vertice * le_vert(FILE * arq)
 	char *aux2 = malloc(sizeof(char) * 100);
 	char aux3;
 
-	fread(&aux1, sizeof(int), 1, arq);//le o id do vertice
-	aux.id = aux1;
-
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
 	fscanf(arq,"%s",aux2);//le o nome;
 	aux.nome =  aux2;
