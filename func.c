@@ -1,3 +1,5 @@
+#include "tad_grafo.h"
+
 
 float * geraPeso(vertice * A, vertice * B)
 {
