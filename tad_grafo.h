@@ -8,3 +8,5 @@ int desalocaAresta(Grafo* g, int v1, int v2);
 void imprimeGrafo(Grafo* g);
 int verificaUser(Grafo* g, int user);
 void desalocaGrafo(Grafo* g);
+float * geraPeso(vertice * A, vertice * B);
+int getAmigoSimi(vertice * A, vertice * B);
