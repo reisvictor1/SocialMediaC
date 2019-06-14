@@ -1,6 +1,5 @@
 #include "tad_grafo.h"
 
-
 float * geraPeso(vertice * A, vertice * B)
 {
 	float p = 0;
@@ -22,31 +21,22 @@ float * geraPeso(vertice * A, vertice * B)
 	if (strcmp(A.cidade, B.cidade) == 0)
 		p += 5;
 	
-
 	if (strcmp(A.time, B.time) == 0)
 		p+= 5;
-	
 
 	if (strcmp(A.gFilme, B.gFilme) == 0)
 		p+= 5;
 	
-
 	if (strcmp(A.gMusica, B.gMusica) == 0)
 		p+= 5;
 	
-
 	if (strcmp(A.comida, B.comida) == 0)
 		p+= 5;
 	
 	if (A.numA <= B.numA)
-	{
 		p += getAmigoSimi(A, B);		
-	}
 	else
-	{
 		p += getAmigoSimi(B, A);
-	}
-	
 
 	p = 1/p;
 
@@ -77,10 +67,9 @@ int getAmigoSimi(vertice * A, vertice * B)
 				cmp = cmp->prox;
 			}
 		}
-		
+
 		aux = aux->prox;
 	}
-
 	count * 3; //multiplica o numero de amigos por 3 pois esse é o valor no peso de uma amisade em comum
 
 	return count;

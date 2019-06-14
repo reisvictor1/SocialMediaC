@@ -6,9 +6,27 @@
 int main(){
 
     int num_vertices;
-    printf("Quantas pessoas existem na rede?\n");
-    scanf("%d",&num_vertices);
+    char * nome[50];
+    FILE * arq;
+    printf("Insira o nome do bando de dados desejado!\n");
+    scanf("%s", nome);
+    arq =  fopen(nome, "r");
+  
+    if (arq == NULL)//arquivo nao existente
+    {
+        printf("Erro: FALHA NO PROCESSAMENTO DO ARQUIVO\n");
+        return 0;
+    }
+
+    fscanf(arq,"%d", &num_vertices);
+    if (num_vertices <= 0)//arquivo invalido
+    {
+        printf("Erro: FALHA NO PROCESSAMENTO DO ARQUIVO\n");
+        return 0;
+    }
+
     Grafo* g = criaGrafo(num_vertices);
+    le_arq_vertices(arq, g, num_vertices);
     system("clear");
     int user;
     char op1;

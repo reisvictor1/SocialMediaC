@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "trab_grafo.h"
+#include "tad_grafo.h"
 
 vertice * le_vert(FILE * arq)
 {
@@ -16,34 +16,34 @@ vertice * le_vert(FILE * arq)
 	char aux3;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le o nome;
+	fscanf(arq,"%s",aux2);//le o nome ate o \0
 	aux.nome =  aux2;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le cidade
+	fscanf(arq,"%s",aux2);//le cidade ate o \0
 	aux.cidade = aux2;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le time
+	fscanf(arq,"%s",aux2);//le time ate o \0
 	aux.time = aux2;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le genero de Filme
+	fscanf(arq,"%s",aux2);//le genero de Filme ate o \0
 	aux.gFilme = aux2;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le genero de musica
+	fscanf(arq,"%s",aux2);//le genero de musica ate o \0
 	aux.gMusica = aux2;
 
 	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le comida
+	fscanf(arq,"%s",aux2);//le comida ate o \0
 	aux.comida = aux2;
 	fread(&aux3, sizeof(char),1, arq);//le o\n
 
 	return aux;
 }
 
-void le_arq_vertices(FILE * arq, grafo * g)
+void le_arq_vertices(FILE * arq, grafo * g, int numv)
 {
 	if (arq == NULL)
 	{
@@ -51,13 +51,11 @@ void le_arq_vertices(FILE * arq, grafo * g)
 		return;
 	}
 
-	int numV = 0;
 	vertice * aux;
-	fread(&numV, sizeof(int),1, arq);//le o numero de vertices contido no arquivo
 
 	for (int i = 0; i < numV; i++)
 	{
 		aux =  le_vert(arq);//le o proximo vertice do arquivo
-		inserir_vertice(g, aux);//insere o vertice lido no grafo
+		inserir_vertice(int i, aux);
 	}
 }

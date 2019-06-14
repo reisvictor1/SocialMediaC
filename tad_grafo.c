@@ -122,5 +122,17 @@ void desalocaGrafo(Grafo* g){
     }
 
    free(g->v);
- 
+}
+
+void inserir_vertice(Grafo * g,int i, vertice *aux);
+{
+	g->v[i].nome = aux.nome;
+	g->v[i].idade = aux.idade;
+	g->v[i].cidade = aux.cidade;
+	g->v[i].time = aux.time;
+	g->v[i].gFilme = aux.gFilme;
+	g->v[i].gMusica = aux.gMusica;
+	g->v[i].comida = aux.comida;
+
+	free(aux);
 }
