@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tad_grafo.h"
 #include <math.h>
 #define MAX_VERTICES 10
@@ -8,10 +9,11 @@ typedef struct aresta
 {
     int v;
     float peso;
+    int amigos;//0 -nao sao amigos; 1- sao amigos
     struct aresta *prox;
 }Aresta;
 
-struct vertice
+typedef struct vertice
 {
    int v;
    char nome[50];
@@ -19,11 +21,12 @@ struct vertice
    char cidade[50];
    char time[50];
    char gFilme[50];
-   char fMusica[50];
+   char gMusica[50];
    char comida[50];
    int numA;//numero de arestas desse vertice
+   Aresta * cab;
 
-};
+}Vertice;
 
 struct grafo{
 
@@ -36,19 +39,18 @@ Grafo* criaGrafo(int v){
 
     Grafo* g = (Grafo*) malloc(sizeof(Grafo));
     g->num_vertices = v;
-    g->v = (vertice*) malloc(v*sizeof(Vertice));
+    g->v = (Vertice*) malloc(v*sizeof(Vertice));
    
     for (int i = 0; i < g->num_vertices; i++){
-      g->v[i].cab = NULL;
-      g->v[i].v = i;
-      g->v[i].nome = "\0";
-      g->v[i].idade = 0;
-      g->v[i].cidade = "\0";
-      g->v[i].time = "\0";
-      g->v[i].gFilme = "\0";
-      g->v[i].gMusica = "\0";
-      g->v[i].numA = 0;
-      g->v[i].comida = "\0";
+    	g->v[i].cab = NULL;
+    	g->v[i].v = i;
+    	strcpy(g->v[i].nome,"\0");
+		g->v[i].idade = 0;
+		strcpy(g->v[i].cidade, "\0");
+		strcpy(g->v[i].time, "\0");
+		strcpy(g->v[i].gFilme, "\0");
+		strcpy(g->v[i].gMusica, "\0");
+		strcpy(g->v[i].comida, "\0");
     }
     
     return g;
@@ -152,15 +154,15 @@ void desalocaGrafo(Grafo* g){
    free(g->v);
 }
 
-void inserir_vertice(Grafo * g,int i, vertice *aux);
+void inserir_vertice(Grafo * g,int i, Vertice *aux)
 {
-	g->v[i].nome = aux.nome;
-	g->v[i].idade = aux.idade;
-	g->v[i].cidade = aux.cidade;
-	g->v[i].time = aux.time;
-	g->v[i].gFilme = aux.gFilme;
-	g->v[i].gMusica = aux.gMusica;
-	g->v[i].comida = aux.comida;
+	strcpy(g->v[i].nome,aux->nome);
+	g->v[i].idade = aux->idade;
+	strcpy(g->v[i].cidade, aux->cidade);
+	strcpy(g->v[i].time, aux->time);
+	strcpy(g->v[i].gFilme, aux->gFilme);
+	strcpy(g->v[i].gMusica, aux->gMusica);
+	strcpy(g->v[i].comida, aux->comida);
 
 	free(aux);
 }
@@ -199,9 +201,9 @@ float geraPeso(Grafo * g,int A, int B)
 		p+= 5;
 	
 	if (g->v[A].numA <= g->v[B].numA)
-		p += getAmigoSimi(A, B);		
+		p += getAmigoSimi(g,A, B);		
 	else
-		p += getAmigoSimi(B, A);
+		p += getAmigoSimi(g,B, A);
 
 	p = 1/p;
 
@@ -210,22 +212,22 @@ float geraPeso(Grafo * g,int A, int B)
 
 int getAmigoSimi(Grafo * g,int A, int B)
 {	
-	aresta * aux =  g->v[A].lista.cab;
-	aresta * cmp;
+	Aresta * aux =  g->v[A].cab;
+	Aresta * cmp;
 	int count = 0;
 	while(aux != NULL)
 	{
-		if (saoAmigos(aux))
+		if (aux->amigos == 1)
 		{
-			cmp = g->v[B].lista.cab;
+			cmp = g->v[B].cab;
 			while(cmp != NULL)
 			{
-				if (aux.v ==  cpm.v)
+				if (aux->v ==  cmp->v)
 				{
-					if (saoAmigos(cmp))
+					if (cmp->amigos == 1)
 					{
 						count++;
-						break
+						break;
 					}
 				}
 				cmp = cmp->prox;
@@ -234,7 +236,7 @@ int getAmigoSimi(Grafo * g,int A, int B)
 
 		aux = aux->prox;
 	}
-	count * 3; //multiplica o numero de amigos por 3 pois esse é o valor no peso de uma amisade em comum
+	count *=  3; //multiplica o numero de amigos por 3 pois esse é o valor no peso de uma amisade em comum
 
 	return count;
 }

@@ -13,5 +13,6 @@ int verificaUser(Grafo* g, int user);
 void desalocaGrafo(Grafo* g);
 float geraPeso(Grafo * g,int A, int B);
 int getAmigoSimi(Grafo * g,int A, int B);
+void inserir_vertice(Grafo * g,int i, Vertice *aux);
 
 #endif
