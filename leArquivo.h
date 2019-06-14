@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "trab_grafo.h"
+#include "tad_grafo.h"
 
-	vertice * le_vert(FILE * arq);
-	void le_arq_vertices(FILE * arq, grafo * g);
+	Vertice * le_vert(FILE * arq);
+	void le_arq_vertices(FILE * arq, Grafo * g, int numv);
 
 
 #endif

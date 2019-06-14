@@ -43,7 +43,7 @@ vertice * le_vert(FILE * arq)
 	return aux;
 }
 
-void le_arq_vertices(FILE * arq, grafo * g, int numv)
+void le_arq_vertices(FILE * arq, Grafo * g, int numv)
 {
 	if (arq == NULL)
 	{
@@ -51,11 +51,17 @@ void le_arq_vertices(FILE * arq, grafo * g, int numv)
 		return;
 	}
 
-	vertice * aux;
+	if (g == NULL)
+	{
+		printf("Grafo não encontrado\n");
+		return;
+	}
+
+	Vertice * aux;
 
 	for (int i = 0; i < numV; i++)
 	{
 		aux =  le_vert(arq);//le o proximo vertice do arquivo
-		inserir_vertice(int i, aux);
+		inserir_vertice(g, i, aux);
 	}
 }

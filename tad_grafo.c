@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tad_grafo.h"
+#include <math.h>
 #define MAX_VERTICES 10
 
 typedef struct aresta
@@ -13,7 +14,6 @@ typedef struct aresta
 struct vertice
 {
    int v;
-<<<<<<< HEAD
    char nome[50];
    int idade;
    char cidade[50];
@@ -22,9 +22,7 @@ struct vertice
    char fMusica[50];
    char comida[50];
    int numA;//numero de arestas desse vertice
-=======
->>>>>>> 47df901930cbeaebfb58fc76902a3018e8aef635
-   Aresta* cab;
+
 };
 
 struct grafo{
@@ -38,7 +36,7 @@ Grafo* criaGrafo(int v){
 
     Grafo* g = (Grafo*) malloc(sizeof(Grafo));
     g->num_vertices = v;
-    g->v = (Vertice*) malloc(v*sizeof(Vertice));
+    g->v = (vertice*) malloc(v*sizeof(Vertice));
    
     for (int i = 0; i < g->num_vertices; i++){
       g->v[i].cab = NULL;
@@ -167,11 +165,11 @@ void inserir_vertice(Grafo * g,int i, vertice *aux);
 	free(aux);
 }
 
-float * geraPeso(vertice * A, vertice * B)
+float geraPeso(Grafo * g,int A, int B)
 {
 	float p = 0;
 	
-	int dif = abs(A.idade - B.idade);//recebe a diferenca de idade
+	int dif = abs(g->v[A].idade - g->v[B].idade);//recebe a diferenca de idade
 	if (dif <= 3)
 	{
 		p += 9;
@@ -185,22 +183,22 @@ float * geraPeso(vertice * A, vertice * B)
 		p += 2;
 	}
 
-	if (strcmp(A.cidade, B.cidade) == 0)
+	if (strcmp(g->v[A].cidade, g->v[B].cidade) == 0)
 		p += 5;
 	
-	if (strcmp(A.time, B.time) == 0)
+	if (strcmp(g->v[A].time, g->v[B].time) == 0)
 		p+= 5;
 
-	if (strcmp(A.gFilme, B.gFilme) == 0)
+	if (strcmp(g->v[A].gFilme, g->v[B].gFilme) == 0)
 		p+= 5;
 	
-	if (strcmp(A.gMusica, B.gMusica) == 0)
+	if (strcmp(g->v[A].gMusica, g->v[B].gMusica) == 0)
 		p+= 5;
 	
-	if (strcmp(A.comida, B.comida) == 0)
+	if (strcmp(g->v[A].comida, g->v[B].comida) == 0)
 		p+= 5;
 	
-	if (A.numA <= B.numA)
+	if (g->v[A].numA <= g->v[B].numA)
 		p += getAmigoSimi(A, B);		
 	else
 		p += getAmigoSimi(B, A);
@@ -210,16 +208,16 @@ float * geraPeso(vertice * A, vertice * B)
 	return p;
 }
 
-int getAmigoSimi(vertice * A, vertice * B)
+int getAmigoSimi(Grafo * g,int A, int B)
 {	
-	aresta * aux =  A.lista.cab;
+	aresta * aux =  g->v[A].lista.cab;
 	aresta * cmp;
 	int count = 0;
 	while(aux != NULL)
 	{
 		if (saoAmigos(aux))
 		{
-			cmp = B.lista.cab;
+			cmp = g->v[B].lista.cab;
 			while(cmp != NULL)
 			{
 				if (aux.v ==  cpm.v)

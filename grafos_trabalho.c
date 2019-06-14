@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tad_grafo.h";
+#include "tad_grafo.h"
 #include "leArquivo.h"
 
 int main(){
 
     int num_vertices;
-    char * nome[50];
+    char nome[50];
     FILE * arq;
     printf("Insira o nome do bando de dados desejado!\n");
     scanf("%s", nome);
@@ -80,15 +80,11 @@ int main(){
                     printf("Esse usuário não existe!!\n");
                 }
 
-                break;
-            
+                break;    
         }
 
     }while((op1 == 'S') || (op1 == 's'));
 
- 
-
     desalocaGrafo(g);
     free(g);
-
 }
