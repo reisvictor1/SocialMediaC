@@ -129,11 +129,10 @@ int desalocaAresta(Grafo* g, int v1, int v2){
 
 void listaAmigos(Grafo* g, int v){
     printf("Seus amigos são:\n");
-    Vertice amg;
     Aresta *p = g->v[v].cab;
     while(p){
-        amg = g->v[p->v];
-        printf("%s, ",amg.nome);
+        printf("%s\n",g->v[p->v].nome);
+        p = p->prox;
     }
     printf("\n");
 }
@@ -152,11 +151,23 @@ void imprimeGrafo(Grafo* g){
     }
 }
 
+int verificaNome(Grafo* g,char* nome){
+   
+    for(int i = 0; i< g->num_vertices; i++){
+        if(strcmp(g->v[i].nome,nome) == 0)
+            return i;
+    }
+    printf("Não existe ninguém com este nome na rede");
+    return -1;
+}
 
 int verificaUser(Grafo* g, int user){
-    if(user < g->num_vertices) return 1;
 
-    return 0;
+    if(user < 0) return 0;
+
+    if(user >= g->num_vertices) return 0;
+
+    return 1;
 }
 
 void desalocaGrafo(Grafo* g){

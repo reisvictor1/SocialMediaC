@@ -7,6 +7,7 @@ int criaAresta(Grafo* g,int v1, int v2);
 int desalocaAresta(Grafo* g, int v1, int v2);
 void imprimeGrafo(Grafo* g);
 int verificaUser(Grafo* g, int user);
+int verificaNome(Grafo* g,char* nome);
 void desalocaGrafo(Grafo* g);
 float geraPeso(Grafo * g,int A, int B);
 int getAmigoSimi(Grafo * g,int A, int B);

@@ -28,7 +28,9 @@ int main(){
     Grafo* g = criaGrafo(num_vertices);
     le_arq_vertices(arq, g, num_vertices);
     system("clear");
-    int user, v;
+    int v;
+    int id;
+    char user[50];
     char op1;
     int op2;
 
@@ -40,9 +42,10 @@ int main(){
             case 'S':
             case 's':
                 printf("Qual é o seu usuário?\n");
-                scanf("%d",&user);
+                scanf("%s",user);
+                id = verificaNome(g,user);
                 system("clear");
-                if(verificaUser(g,user)){
+                if(verificaUser(g,id)){
                     do
                     {
                         printf("Quais das opções você quer?\n0)Listar seus amigos\n1) Fazer amizade\n2) Sugerir Amizade\n3) Detectar amizade falsa\n4) Encontrar namorado(a) ideal\n5)Sair\n");
@@ -51,15 +54,14 @@ int main(){
                         switch(op2){
                             case 0:
                                 
-                                listaAmigos(g,user);
+                                listaAmigos(g,id);
                                 break;
                             case 1:
                                
                                 printf("Com quem você quer fazer amizade?");
                                 scanf("%d",&v);
-                                criaAresta(g,user,v);
-                                imprimeGrafo(g);
-                               // system("clear");
+                                criaAresta(g,id,v);
+                                
                                 break;
                             case 2:
 
@@ -69,7 +71,7 @@ int main(){
                             case 3:
                                 printf("Quem você quer retirar?");
                                 scanf("%d",&v);
-                                desalocaAresta(g,user,v);
+                                desalocaAresta(g,id,v);
                                 system("clear");
                                 break;
                             case 4:
