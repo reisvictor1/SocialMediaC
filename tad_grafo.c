@@ -274,10 +274,10 @@ float geraPeso(Grafo * g,int A, int B)
 float verificaCompatibilidade(Grafo*g, int v1, int v2){
     int total = 0;
     total += verificaDiferenca(g,g->v[v1].idade,g->v[v2].idade);
-    if (g->v[A].numA <= g->v[B].numA)
-		total += getAmigoSimi(g,A, B);		
+    if (g->v[v1].numA <= g->v[v2].numA)
+		total += getAmigoSimi(g,v1, v2);		
 	else
-		total += getAmigoSimi(g,B, A);
+		total += getAmigoSimi(g,v2, v1);
 
     total+= 25;
     

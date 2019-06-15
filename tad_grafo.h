@@ -12,5 +12,5 @@ float geraPeso(Grafo * g,int A, int B);
 int getAmigoSimi(Grafo * g,int A, int B);
 void inserir_vertice(Grafo * g,int i, Vertice *aux);
 void listaAmigos(Grafo* g, int v);
-int verificaCompatibilidade(Grafo*g, int v1, int v2);
+float verificaCompatibilidade(Grafo*g, int v1, int v2);
 int verificaDiferenca(Grafo* g, int n1, int n2);

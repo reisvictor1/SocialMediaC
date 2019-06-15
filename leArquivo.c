@@ -48,10 +48,7 @@ Vertice* le_vert(FILE * arq)
 	char aux3;
 
 	
-	fscanf(arq,"%d",&aux1);
-	aux->v = aux1;
 
-	fread(&aux3, sizeof(char),1, arq);
 	fscanf(arq,"%s",aux2);//le o nome ate o \0
 	strcpy(aux->nome, aux2);
 

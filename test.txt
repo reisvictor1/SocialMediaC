@@ -1,4 +1,4 @@
 3
-0, Victor\0, 20, Cubatao\0, Santos\0, Terror\0, Rock\0, Strogonoff\0\n
-1, Luiz\0, 22, Sao Vicente\0, Palmeiras\0, Comedia\0, Rock\0, Lasanha\0\n
-2, Tommy\0, 20, Piracicaba\0, Santos\0, Aventura\0, Pop\0, Risotto\0\n
+Victor\0, 20, Cubatao\0, Santos\0, Terror\0, Rock\0, Strogonoff\0\n
+Luiz\0, 22, Sao Vicente\0, Palmeiras\0, Comedia\0, Rock\0, Lasanha\0\n
+Tommy\0, 20, Piracicaba\0, Santos\0, Aventura\0, Pop\0, Risotto\0\n
