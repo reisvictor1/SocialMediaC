@@ -90,6 +90,7 @@ int criaAresta(Grafo* g,int v1, int v2){
         ant->prox = novo;
 
     }
+    g->v[v1].numA++;
 
     return 0;
 }
@@ -294,4 +295,94 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2){
     
     float p = 1/geraPeso(g,v1,v2);
     return (p/(float) total)*100;
+}
+
+void reajuste_de_prioridade(float *distancia, int *prioridade)
+{
+
+	int i;
+	if (prioridade[0] < 0)//removido
+	{
+		i = 1;
+		while(prioridade[i] != -1)
+		{
+			prioridade[i-1] = prioridade[i];
+		}
+		prioridade[i-1] = -1;
+	}
+
+	i = 0;
+	int j;
+	while(prioridade[i] != -1)
+	{
+		j = i+1;
+
+		while(prioridade[j] != -1)
+		{
+			if (distancia[prioridade[i]] < distancia[prioridade[j]] )
+			{
+				int k = prioridade[j];
+				prioridade[j] = prioridade[i];
+				prioridade[i] = k;
+			}
+			j++;
+		}
+		i++;
+	}
+		
+}
+
+void relaxamento(float *distancias, int *prioridade, int vert, float distPossivel)
+{
+	if (distancias[vert] > distPossivel)
+		distancias[vert] = 	distPossivel;
+	
+	int i = 0;
+
+	while(prioridade[i] != -1)
+	{
+		if (prioridade[i] == vert)
+		{
+			reajuste_de_prioridade(distancias, prioridade);
+			return;
+		}
+		i++;
+	}
+
+	prioridade[i] = vert;
+	reajuste_de_prioridade(distancias, prioridade);
+}
+
+int * dijkstra(Grafo *g, int inicio)
+{
+	float distancia[g->num_vertices];
+	int *anterior = malloc(sizeof(int) * g->num_vertices);
+	int prioridade[g->num_vertices];
+	for (int i = 0; i < g->num_vertices; i++)
+	{
+		distancia[i] = 99999999999;
+		anterior[i] = -1;
+		prioridade[i] = -1;
+	}
+
+	distancia[inicio] = 0;
+	prioridade[0] = inicio;
+	int utilizado = -1;
+	Aresta * aux;
+
+	while(prioridade[0] != -1)
+	{
+		anterior[prioridade[0]] = utilizado;
+		utilizado = prioridade[0];
+		prioridade[0] = -2;//remove da lista de prioridade
+		aux = g->v[utilizado].cab;//primeira aresta do vertice verificado
+
+		for (int i = 0; i < g->v[utilizado].numA; i++)
+		{
+			if ((anterior[aux->v] == -1 && aux->v != inicio))//nao foi utilizado ainda
+				relaxamento(distancia, prioridade, aux->v, aux->peso + distancia[utilizado]);
+		}
+	}
+
+	return anterior;
 }
