@@ -75,9 +75,14 @@ int criaAresta(Grafo* g,int v1, int v2){
         g->v[v1].cab = novo;
     }
     else{
+        
         Aresta *p = g->v[v1].cab;
         Aresta *ant;
         while(p){
+            if(p->v == v2){
+                printf("Você já tem essa pessoa como amigo!\n");
+                return 1;
+            }
             ant = p;
             p = p->prox;
         }
@@ -93,6 +98,12 @@ int desalocaAresta(Grafo* g, int v1, int v2){
 
     Aresta* p = g->v[v1].cab;
     Aresta* aux = NULL;
+
+    if(v1 == v2){
+        printf("Vejo que está com raiva de seu espírito interior!\n");
+        return 1;
+    }
+
     while(p){
 
         if(p->v == v2){
@@ -112,9 +123,20 @@ int desalocaAresta(Grafo* g, int v1, int v2){
         p = p->prox;
     }
 
+    printf("Putz... Você não sabe quem são seus amigos?\n");
     return 1;
 }
 
+void listaAmigos(Grafo* g, int v){
+    printf("Seus amigos são:\n");
+    Vertice amg;
+    Aresta *p = g->v[v].cab;
+    while(p){
+        amg = g->v[p->v];
+        printf("%s, ",amg.nome);
+    }
+    printf("\n");
+}
 
 void imprimeGrafo(Grafo* g){
     for(int i = 0; i < g->num_vertices; i++){
@@ -167,49 +189,6 @@ void inserir_vertice(Grafo * g,int i, Vertice *aux)
 	free(aux);
 }
 
-float geraPeso(Grafo * g,int A, int B)
-{
-	float p = 0;
-	
-	int dif = abs(g->v[A].idade - g->v[B].idade);//recebe a diferenca de idade
-	if (dif <= 3)
-	{
-		p += 9;
-	}
-	else if (dif <= 6 )
-	{
-		p+= 5;
-	}
-	else
-	{
-		p += 2;
-	}
-
-	if (strcmp(g->v[A].cidade, g->v[B].cidade) == 0)
-		p += 5;
-	
-	if (strcmp(g->v[A].time, g->v[B].time) == 0)
-		p+= 5;
-
-	if (strcmp(g->v[A].gFilme, g->v[B].gFilme) == 0)
-		p+= 5;
-	
-	if (strcmp(g->v[A].gMusica, g->v[B].gMusica) == 0)
-		p+= 5;
-	
-	if (strcmp(g->v[A].comida, g->v[B].comida) == 0)
-		p+= 5;
-	
-	if (g->v[A].numA <= g->v[B].numA)
-		p += getAmigoSimi(g,A, B);		
-	else
-		p += getAmigoSimi(g,B, A);
-
-	p = 1/p;
-
-	return p;
-}
-
 int getAmigoSimi(Grafo * g,int A, int B)
 {	
 	Aresta * aux =  g->v[A].cab;
@@ -239,4 +218,69 @@ int getAmigoSimi(Grafo * g,int A, int B)
 	count *=  3; //multiplica o numero de amigos por 3 pois esse é o valor no peso de uma amisade em comum
 
 	return count;
+}
+
+int verificaDiferenca(Grafo* g, int n1, int n2){
+    int p;
+  	int dif = abs(n1 - n2);//recebe a diferenca de idade
+	if (dif <= 3)
+	{
+		p += 9;
+	}
+	else if (dif <= 6 )
+	{
+		p+= 5;
+	}
+	else
+	{
+		p += 2;
+	}  
+
+    return p;
+}
+
+float geraPeso(Grafo * g,int A, int B)
+{
+	float p = 0;
+	
+    p+= verificaDiferenca(g,g->v[A].idade,g->v[B].idade);
+
+	if (strcmp(g->v[A].cidade, g->v[B].cidade) == 0)
+		p += 5;
+	
+	if (strcmp(g->v[A].time, g->v[B].time) == 0)
+		p+= 5;
+
+	if (strcmp(g->v[A].gFilme, g->v[B].gFilme) == 0)
+		p+= 5;
+	
+	if (strcmp(g->v[A].gMusica, g->v[B].gMusica) == 0)
+		p+= 5;
+	
+	if (strcmp(g->v[A].comida, g->v[B].comida) == 0)
+		p+= 5;
+	
+	if (g->v[A].numA <= g->v[B].numA)
+		p += getAmigoSimi(g,A, B);		
+	else
+		p += getAmigoSimi(g,B, A);
+
+	p = 1/p;
+
+	return p;
+}
+
+
+float verificaCompatibilidade(Grafo*g, int v1, int v2){
+    int total = 0;
+    total += verificaDiferenca(g,g->v[v1].idade,g->v[v2].idade);
+    if (g->v[A].numA <= g->v[B].numA)
+		total += getAmigoSimi(g,A, B);		
+	else
+		total += getAmigoSimi(g,B, A);
+
+    total+= 25;
+    
+    float p = 1/geraPeso(g,v1,v2);
+    return (p/(float) total)*100;
 }

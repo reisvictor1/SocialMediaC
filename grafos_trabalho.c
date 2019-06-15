@@ -28,7 +28,7 @@ int main(){
     Grafo* g = criaGrafo(num_vertices);
     le_arq_vertices(arq, g, num_vertices);
     system("clear");
-    int user;
+    int user, v;
     char op1;
     int op2;
 
@@ -45,18 +45,21 @@ int main(){
                 if(verificaUser(g,user)){
                     do
                     {
-                        printf("Quais das opções você quer?\n1) Fazer amizade\n2) Sugerir Amizade\n3) Detectar amizade falsa\n4) Encontrar namorado(a) ideal\n5)Sair\n");
+                        printf("Quais das opções você quer?\n0)Listar seus amigos\n1) Fazer amizade\n2) Sugerir Amizade\n3) Detectar amizade falsa\n4) Encontrar namorado(a) ideal\n5)Sair\n");
                         scanf("%d",&op2);
                         system("clear");
                         switch(op2){
+                            case 0:
+                                
+                                listaAmigos(g,user);
+                                break;
                             case 1:
                                
                                 printf("Com quem você quer fazer amizade?");
-                                int v;
                                 scanf("%d",&v);
                                 criaAresta(g,user,v);
-
-                                system("clear");
+                                imprimeGrafo(g);
+                               // system("clear");
                                 break;
                             case 2:
 
@@ -64,7 +67,9 @@ int main(){
                                 system("clear");
                                 break;
                             case 3:
-
+                                printf("Quem você quer retirar?");
+                                scanf("%d",&v);
+                                desalocaAresta(g,user,v);
                                 system("clear");
                                 break;
                             case 4:
@@ -74,7 +79,7 @@ int main(){
                                 break;
                         }
 
-                    }while (op2 != 5);
+                    }while (op2 < 5);
                     
                 }else{
                     printf("Esse usuário não existe!!\n");
@@ -85,6 +90,7 @@ int main(){
 
     }while((op1 == 'S') || (op1 == 's'));
 
+    fclose(arq);
     desalocaGrafo(g);
     free(g);
 }

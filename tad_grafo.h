@@ -1,6 +1,3 @@
-#ifndef TAD_GRAFO_H
-#define TAD_GRAFO_H
-
 typedef struct grafo Grafo;
 typedef struct aresta Aresta;
 typedef struct vertice Vertice;
@@ -14,5 +11,6 @@ void desalocaGrafo(Grafo* g);
 float geraPeso(Grafo * g,int A, int B);
 int getAmigoSimi(Grafo * g,int A, int B);
 void inserir_vertice(Grafo * g,int i, Vertice *aux);
-
-#endif
+void listaAmigos(Grafo* g, int v);
+int verificaCompatibilidade(Grafo*g, int v1, int v2);
+int verificaDiferenca(Grafo* g, int n1, int n2);
