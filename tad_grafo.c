@@ -353,10 +353,10 @@ void relaxamento(float *distancias, int *prioridade, int vert, float distPossive
 	reajuste_de_prioridade(distancias, prioridade);
 }
 
-int * dijkstra(Grafo *g, int inicio)
+float * dijkstra(Grafo *g, int inicio)
 {
-	float distancia[g->num_vertices];
-	int *anterior = malloc(sizeof(int) * g->num_vertices);
+	float *distancia = malloc(sizeof(float) * g->num_vertices);
+	int anterior[g->num_vertices];
 	int prioridade[g->num_vertices];
 	for (int i = 0; i < g->num_vertices; i++)
 	{
@@ -381,8 +381,9 @@ int * dijkstra(Grafo *g, int inicio)
 		{
 			if ((anterior[aux->v] == -1 && aux->v != inicio))//nao foi utilizado ainda
 				relaxamento(distancia, prioridade, aux->v, aux->peso + distancia[utilizado]);
+			aux = aux->prox;
 		}
 	}
 
-	return anterior;
+	return distancia;
 }
