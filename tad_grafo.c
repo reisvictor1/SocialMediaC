@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tad_grafo.h"
+#include "fila.h"
 #include <math.h>
 #define MAX_VERTICES 10
+#define infinito 99999999999
 
 typedef struct aresta
 {
@@ -233,7 +235,7 @@ int getAmigoSimi(Grafo * g,int A, int B)
 }
 
 int verificaDiferenca(Grafo* g, int n1, int n2){
-    int p;
+    int p = 0;
   	int dif = abs(n1 - n2);//recebe a diferenca de idade
 	if (dif <= 3)
 	{
@@ -297,93 +299,46 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2){
     return (p/(float) total)*100;
 }
 
-void reajuste_de_prioridade(float *distancia, int *prioridade)
-{
-
-	int i;
-	if (prioridade[0] < 0)//removido
-	{
-		i = 1;
-		while(prioridade[i] != -1)
-		{
-			prioridade[i-1] = prioridade[i];
-		}
-		prioridade[i-1] = -1;
-	}
-
-	i = 0;
-	int j;
-	while(prioridade[i] != -1)
-	{
-		j = i+1;
-
-		while(prioridade[j] != -1)
-		{
-			if (distancia[prioridade[i]] < distancia[prioridade[j]] )
-			{
-				int k = prioridade[j];
-				prioridade[j] = prioridade[i];
-				prioridade[i] = k;
-			}
-			j++;
-		}
-		i++;
-	}
-		
-}
-
-void relaxamento(float *distancias, int *prioridade, int vert, float distPossivel)
-{
-	if (distancias[vert] > distPossivel)
-		distancias[vert] = 	distPossivel;
-	
-	int i = 0;
-
-	while(prioridade[i] != -1)
-	{
-		if (prioridade[i] == vert)
-		{
-			reajuste_de_prioridade(distancias, prioridade);
-			return;
-		}
-		i++;
-	}
-
-	prioridade[i] = vert;
-	reajuste_de_prioridade(distancias, prioridade);
-}
 
 float * dijkstra(Grafo *g, int inicio)
 {
 	float *distancia = malloc(sizeof(float) * g->num_vertices);
 	int anterior[g->num_vertices];
-	int prioridade[g->num_vertices];
+	fila *priori = cria_fila();//fila de prioridade
+
 	for (int i = 0; i < g->num_vertices; i++)
 	{
 		distancia[i] = 99999999999;
 		anterior[i] = -1;
-		prioridade[i] = -1;
 	}
 
 	distancia[inicio] = 0;
-	prioridade[0] = inicio;
+	criar_no(priori, inicio, 0);
 	int utilizado = -1;
+	int atual;
 	Aresta * aux;
 
-	while(prioridade[0] != -1)
-	{
-		anterior[prioridade[0]] = utilizado;
-		utilizado = prioridade[0];
-		prioridade[0] = -2;//remove da lista de prioridade
-		aux = g->v[utilizado].cab;//primeira aresta do vertice verificado
+	while(vazia(priori) != 0){
+		atual = remover(priori);
+		anterior[atual] = utilizado;
 
-		for (int i = 0; i < g->v[utilizado].numA; i++)
-		{
-			if ((anterior[aux->v] == -1 && aux->v != inicio))//nao foi utilizado ainda
-				relaxamento(distancia, prioridade, aux->v, aux->peso + distancia[utilizado]);
-			aux = aux->prox;
+		aux = g->v[atual].cab;
+		while(aux != NULL){
+
+			if ((distancia[aux->v] > distancia[atual] + aux->peso) && (aux->v != inicio) && (anterior[aux->v] == -1))
+			{
+				if (distancia[aux->v] ==  infinito)
+					criar_no(priori, aux->v, distancia[atual] + aux->peso);
+				
+				distancia[aux->v] = distancia[atual] + aux->peso;
+			}
 		}
+
+		atualiza(priori, distancia);
+		utilizado = atual;
 	}
+
+	
 
 	return distancia;
 }
