@@ -27,8 +27,8 @@ typedef struct vertice
    char comida[50];
    int numA;//numero de arestas desse vertice
    Aresta * cab;
-
 }Vertice;
+
 
 struct grafo{
 
@@ -72,6 +72,7 @@ int criaAresta(Grafo* g,int v1, int v2){
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
+    novo->prox = NULL;
     
     if(!(g->v[v1].cab)){
         g->v[v1].cab = novo;
@@ -284,6 +285,52 @@ float geraPeso(Grafo * g,int A, int B)
 	return p;
 }
 
+int saoAmigos(Grafo *g, int A, int B){
+
+	Aresta* aux = g->v[A].cab;
+
+	while(aux!= NULL){
+		if (aux->v == B)
+			return 1;//sao amigos
+		aux = aux->prox;
+	}
+
+	return 0;//nao sao amigos
+}
+
+void sugerir_amizade(Grafo *g, int usuario){
+	
+	float * distancia = dijkstra(g, usuario);
+	float min = infinito;
+	int sugestao = -1;
+    
+	for (int i = 0; i < g->num_vertices; i++)
+	{
+		if ((distancia[i] < min) && i != usuario && (saoAmigos(g, usuario, i) == 0))
+		{
+			min = distancia[i];
+			printf("%f\n", min);
+			sugestao = i;
+		}
+	}
+
+	if (sugestao <= 0)
+    {
+    	char opc;
+        printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
+        printf("Gostaria de torna-lo seu amigo?[S/N]\n");
+        scanf("%c", &opc);
+        if (opc == 's' || opc == 'S')
+        {
+            criaAresta(g,usuario,sugestao);
+        }
+    }
+    else
+    {
+        printf("Não foi possivel encontrar um usuário compativel com você\n");
+    }
+
+}
 
 float verificaCompatibilidade(Grafo*g, int v1, int v2){
     int total = 0;
@@ -332,13 +379,14 @@ float * dijkstra(Grafo *g, int inicio)
 				
 				distancia[aux->v] = distancia[atual] + aux->peso;
 			}
+
+			aux = aux->prox;
 		}
 
 		atualiza(priori, distancia);
 		utilizado = atual;
 	}
 
-	
-
+	liberaFila(priori);//da free na fila de prioridade
 	return distancia;
 }

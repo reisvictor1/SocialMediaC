@@ -90,10 +90,11 @@ void atualiza(fila *f, float *prioridades){
 
 	while(aux != NULL){
 		aux->prioridade = prioridades[aux->v];
-		inserir(atualizada, aux);//faz a insere o no na nova fila de prioridade com as distancias atualizadas
+		inserir(atualizada, aux);//insere o no na nova fila de prioridade com as distancias atualizadas
 
 		aux = f->inicio;//retira no do inicio da fila de prioridade antiga
-		f->inicio =aux->prox;//atualiza o inicio da fila de prioridade antiga
+		if (f->inicio->prox != NULL)
+			f->inicio =aux->prox;//atualiza o inicio da fila de prioridade antiga
 	}
 
 	free(f);

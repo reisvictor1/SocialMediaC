@@ -65,7 +65,7 @@ int main(){
                                 break;
                             case 2:
 
-
+                                sugerir_amizade(g, id);
                                 system("clear");
                                 break;
                             case 3:

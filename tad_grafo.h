@@ -15,3 +15,5 @@ void inserir_vertice(Grafo * g,int i, Vertice *aux);
 void listaAmigos(Grafo* g, int v);
 float verificaCompatibilidade(Grafo*g, int v1, int v2);
 int verificaDiferenca(Grafo* g, int n1, int n2);
+void sugerir_amizade(Grafo *g, int usuario);
+float * dijkstra(Grafo *g, int inicio);
