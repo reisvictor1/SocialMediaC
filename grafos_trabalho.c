@@ -27,7 +27,7 @@ int main(){
 
     Grafo* g = criaGrafo(num_vertices);
     le_arq_vertices(arq, g, num_vertices);
-    system("clear");
+    //system("clear");
     int v;
     int id;
     char user[50];
@@ -37,14 +37,14 @@ int main(){
     do{
         printf("Você quer logar na rede social?(S/N)\n");
         scanf(" %c",&op1);
-        system("clear");
+        //system("clear");
         switch (op1){
             case 'S':
             case 's':
                 printf("Qual é o seu usuário?\n");
                 scanf("%s",user);
                 id = verificaNome(g,user);
-                system("clear");
+               // system("clear");
                 if(verificaUser(g,id)){
                     do
                     {
