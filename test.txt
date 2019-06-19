@@ -1,4 +1,6 @@
-3
-Victor,20,Cubatao,Santos,Terror,Rock,Strogonoff
-Luiz,22,Sao Vicente,Palmeiras,Comedia,Rock,Lasanha
-Tommy,20,Piracicaba,Santos,Aventura,Pop,Risotto
+5
+Victor, 20, Cubatao, Santos, Terror, Rock, Strogonoff\n
+Luiz, 22, Sao Vicente, Palmeiras, Comedia, Rock, Lasanha\n
+Tommy, 20, Piracicaba, Santos, Aventura, Pop, Risotto\n
+Vinicius, 19, Araraquara, Corinthians, Aventura, Grunge, Lasanha\n
+Prado, 18, cidade_da_Bahia, Corinthians, Comedia, Pop, Strogonoff\n

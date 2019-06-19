@@ -44,35 +44,37 @@ Vertice* le_vert(FILE * arq)
 	Vertice *aux = (Vertice*) malloc(sizeof(Vertice));
 	int aux1;
 	char *aux2 = malloc(sizeof(char) * 100);
-	char aux3;	
 
-	fscanf(arq,"%[^,]s",aux2);//le o nome ate a virgula
+	char aux3[3];
+
+	fscanf(arq,"%[^,]s",aux2);//le o nome ate o \0
 	strcpy(aux->nome, aux2);
 
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
+	fscanf(arq,"%[,]s",aux3);
 	fscanf(arq,"%d", &aux1);
 	aux->idade = aux1;
-
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
+	
+	fscanf(arq,"%[,]s",aux3);//le a virgula
 	fscanf(arq,"%[^,]s",aux2);//le cidade ate o \0
 	strcpy(aux->cidade, aux2);
 
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%[^,]s",aux2);//le time ate a ,
+	fscanf(arq,"%[,]s",aux3);//le a virgula
+	fscanf(arq,"%[^,]s",aux2);//le time ate o \0
 	strcpy(aux->time, aux2);
 
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%[^,]s",aux2);//le genero de Filme ate a , 
+	fscanf(arq,"%[,]s",aux3);//le a virgula
+	fscanf(arq,"%[^,]s",aux2);//le genero de Filme ate o \0
 	strcpy(aux->gFilme, aux2);
 
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%[^,]s",aux2);//le genero de musica ate a ,
+	fscanf(arq,"%[,]s",aux3);//le a virgula
+	fscanf(arq,"%[^,]s",aux2);//le genero de musica ate o \0
 	strcpy(aux->gMusica, aux2);
 
-	fread(&aux3, sizeof(char),1, arq);//le a virgula
-	fscanf(arq,"%s",aux2);//le comida ate o \n
+	fscanf(arq,"%[,]s",aux3);//le a virgula
+	fscanf(arq,"%[^\n\r]s",aux2);//le comida ate o \0
+
 	strcpy(aux->comida, aux2);
-	fread(&aux3, sizeof(char),1, arq);//le o\n
+	fscanf(arq,"%[\r\n]s",aux3);//le o\n
 
 	return aux;
 }
