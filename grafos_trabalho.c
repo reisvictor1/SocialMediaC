@@ -50,7 +50,7 @@ int main(){
                 id = verificaNome(g,user);
                 system("clear");
                 if(verificaUser(g,id)){
-                    verificaNovosAmigos(g,id);
+                   // verificaNovosAmigos(g,id);
                     do
                     {
 
@@ -69,19 +69,21 @@ int main(){
                                 v = verificaNome(g,user);
                                 
                                 criaAresta(g,id,v);
-                                criaAresta(g,v,id);
+                                if(v != id)
+                                    criaAresta(g,v,id);
                                 
                                 break;
                             case 2:
 
                                 sugerir_amizade(g, id);
-                                system("clear");
+                              
                                 break;
                             case 3:
                                 printf("Quem você quer retirar?");
-                                scanf("%d",&v);
+                                scanf("%s",user);
+                                int v = verificaNome(g,user);
                                 desalocaAresta(g,id,v);
-                                system("clear");
+                                
                                 break;
                             case 4:
 

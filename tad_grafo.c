@@ -333,7 +333,7 @@ void sugerir_amizade(Grafo *g, int usuario){
     
 	for (int i = 0; i < g->num_vertices; i++)
 	{
-		if ((distancia[i] < min) && i != usuario && (saoAmigos(g, usuario, i) == 0))
+		if ((distancia[i] < min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
 		{
 			min = distancia[i];
 			printf("%f\n", min);
@@ -341,7 +341,7 @@ void sugerir_amizade(Grafo *g, int usuario){
 		}
 	}
 
-	if (sugestao <= 0)
+	if (sugestao >= 0)
     {
     	char opc;
         printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
