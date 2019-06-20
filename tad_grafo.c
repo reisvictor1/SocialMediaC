@@ -134,6 +134,9 @@ int desalocaAresta(Grafo* g, int v1, int v2){
 void listaAmigos(Grafo* g, int v){
     printf("Seus amigos são:\n");
     Aresta *p = g->v[v].cab;
+    if(!p){
+        printf("Você não tem amigos :/");
+    }
     while(p){
         printf("%s\n",g->v[p->v].nome);
         p = p->prox;

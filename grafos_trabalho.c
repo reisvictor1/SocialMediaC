@@ -59,7 +59,8 @@ int main(){
                             case 1:
                                
                                 printf("Com quem você quer fazer amizade?");
-                                scanf("%d",&v);
+                                scanf("%s",user);
+                                v = verificaNome(g,user);
                                 criaAresta(g,id,v);
                                 
                                 break;
