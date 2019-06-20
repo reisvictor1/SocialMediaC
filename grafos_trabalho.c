@@ -7,6 +7,7 @@ int main(){
 
     int num_vertices;
     char nome[50];
+    char aux[3];
     FILE * arq;
     printf("Insira o nome do bando de dados desejado!\n");
     scanf("%s", nome);
@@ -19,6 +20,9 @@ int main(){
     }
 
     fscanf(arq,"%d", &num_vertices);
+    fscanf(arq,"%[\r]s",aux);
+    
+
     if (num_vertices <= 0)//arquivo invalido
     {
         printf("Erro: FALHA NO PROCESSAMENTO DO ARQUIVO\n");
@@ -43,8 +47,9 @@ int main(){
             case 's':
                 printf("Qual é o seu usuário?\n");
                 scanf("%s",user);
+                printf("%s",user);
                 id = verificaNome(g,user);
-               system("clear");
+                system("clear");
                 if(verificaUser(g,id)){
                     do
                     {
@@ -61,6 +66,7 @@ int main(){
                                 printf("Com quem você quer fazer amizade?");
                                 scanf("%s",user);
                                 v = verificaNome(g,user);
+                                
                                 criaAresta(g,id,v);
                                 
                                 break;
@@ -84,8 +90,6 @@ int main(){
 
                     }while (op2 < 5);
                     
-                }else{
-                    printf("Esse usuário não existe!!\n");
                 }
 
                 break;    

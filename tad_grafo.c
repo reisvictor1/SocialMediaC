@@ -135,7 +135,7 @@ void listaAmigos(Grafo* g, int v){
     printf("Seus amigos são:\n");
     Aresta *p = g->v[v].cab;
     if(!p){
-        printf("Você não tem amigos :/");
+        printf("Você não tem amigos :/\n");
     }
     while(p){
         printf("%s\n",g->v[p->v].nome);
@@ -161,10 +161,14 @@ void imprimeGrafo(Grafo* g){
 int verificaNome(Grafo* g,char* nome){
    
     for(int i = 0; i< g->num_vertices; i++){
-        if(strcmp(g->v[i].nome,nome) == 0)
+        
+        if(strcmp(g->v[i].nome,nome) == 0){
+           
             return i;
+        }
+            
     }
-    printf("Não existe ninguém com este nome na rede");
+    printf("Não existe ninguém com este nome na rede.\n");
     return -1;
 }
 
