@@ -47,12 +47,13 @@ int main(){
             case 's':
                 printf("Qual é o seu usuário?\n");
                 scanf("%s",user);
-                printf("%s",user);
                 id = verificaNome(g,user);
                 system("clear");
                 if(verificaUser(g,id)){
+                    verificaNovosAmigos(g,id);
                     do
                     {
+
                         printf("Quais das opções você quer?\n0)Listar seus amigos\n1) Fazer amizade\n2) Sugerir Amizade\n3) Detectar amizade falsa\n4) Encontrar namorado(a) ideal\n5)Sair\n");
                         scanf("%d",&op2);
                         system("clear");
@@ -68,6 +69,7 @@ int main(){
                                 v = verificaNome(g,user);
                                 
                                 criaAresta(g,id,v);
+                                criaAresta(g,v,id);
                                 
                                 break;
                             case 2:

@@ -72,6 +72,7 @@ int criaAresta(Grafo* g,int v1, int v2){
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
+    novo->amigos = 0;
     novo->prox = NULL;
     
     if(!(g->v[v1].cab)){
@@ -108,17 +109,16 @@ int desalocaAresta(Grafo* g, int v1, int v2){
         return 1;
     }
 
-    while(p){
+    while(p != NULL){
 
         if(p->v == v2){
-
+            
             if(p == g->v[v1].cab){
-                g->v[v1].cab = NULL;
-            }
-            else{
+                aux = p->prox;
+                g->v[v1].cab = aux;
+            }else{
                 aux->prox = p->prox;
             }
-
             free(p);
             return 0;
         }
@@ -129,6 +129,26 @@ int desalocaAresta(Grafo* g, int v1, int v2){
 
     printf("Putz... Você não sabe quem são seus amigos?\n");
     return 1;
+}
+
+void verificaNovosAmigos(Grafo *g, int id){
+    Aresta* p = g->v[id].cab;
+    char op;
+    while(p){
+        if(p->amigos == 0){
+            printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
+            scanf(" %c",&op);
+            if(op == 's' || op == 'S'){
+                p->amigos = 1;
+            }
+            else{
+                desalocaAresta(g,id,p->v);
+                desalocaAresta(g,p->v,id);
+            }
+
+        }
+        p = p->prox;
+    }
 }
 
 void listaAmigos(Grafo* g, int v){
@@ -326,7 +346,7 @@ void sugerir_amizade(Grafo *g, int usuario){
     	char opc;
         printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
         printf("Gostaria de torna-lo seu amigo?[S/N]\n");
-        scanf("%c", &opc);
+        scanf(" %c", &opc);
         if (opc == 's' || opc == 'S')
         {
             criaAresta(g,usuario,sugestao);
