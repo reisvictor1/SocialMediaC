@@ -101,23 +101,23 @@ int criaAresta(Grafo* g,int v1, int v2){
     return 0;
 }
 
-int desalocaAresta(Grafo* g, int v1, int v2){
+int desalocaAresta(Grafo* g, int v1, int v2,int flag){
 
-    Aresta* p = g->v[v1].cab;
-    Aresta* aux = NULL;
+    Aresta *p, *aux;
 
-    if(v1 == v2){
-        printf("Vejo que está com raiva de seu espírito interior!\n");
-        return 1;
-    }
+        if(v1 == v2 || !flag){
+            printf("Vejo que está com raiva de seu espírito interior!\n");
+            return 1;
+        }
+    
+    p = g->v[v1].cab;
+    aux = NULL;
 
     while(p != NULL){
-
         if(p->v == v2){
-            
+            p->amigos = 0;
             if(p == g->v[v1].cab){
-                aux = p->prox;
-                g->v[v1].cab = aux;
+                g->v[v1].cab = g->v[v1].cab->prox;
             }else{
                 aux->prox = p->prox;
             }
@@ -128,28 +128,32 @@ int desalocaAresta(Grafo* g, int v1, int v2){
         aux = p;
         p = p->prox;
     }
-
-    printf("Putz... Você não sabe quem são seus amigos?\n");
+    if(!flag)
+        printf("Putz... Você não sabe quem são seus amigos?\n");
     return 1;
 }
 
 void verificaNovosAmigos(Grafo *g, int id){
     Aresta* p = g->v[id].cab;
     char op;
-    while(p){
-        if(p->amigos == 0){
-            printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
-            scanf(" %c",&op);
-            if(op == 's' || op == 'S'){
-                p->amigos = 1;
-            }
-            else{
-                desalocaAresta(g,id,p->v);
-                desalocaAresta(g,p->v,id);
-            }
+    if(p != NULL){
+        while(p){
+            if((id != p->v) || (p != NULL)){
+                if(p->amigos == 0){
+                    printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
+                    scanf(" %c",&op);
+                    if(op == 's' || op == 'S'){
+                        p->amigos = 1;
+                    }
+                    else{
+                        desalocaAresta(g,id,p->v,1);
+                        desalocaAresta(g,p->v,id,1);
+                    }
 
+                }
+            }
+            p = p->prox;
         }
-        p = p->prox;
     }
 }
 
@@ -427,10 +431,12 @@ void detectaFalsos(Grafo* g,int v1){
     Aresta* p = g->v[v1].cab;
 
     while(p){
-        if(verificaCompatibilidade(g,v1,p->v) <= 30.0){
-            desalocaAresta(g,v1,g->v[p->v].v);
-            desalocaAresta(g,g->v[p->v].v,v1);
-            return;
+        if((p != NULL)||(p->v != v1)){
+            if(verificaCompatibilidade(g,v1,p->v) <= 30.0){
+                desalocaAresta(g,v1,g->v[p->v].v,1);
+                desalocaAresta(g,g->v[p->v].v,v1,1);
+                return;
+            }
         }
         p = p->prox;
     }
