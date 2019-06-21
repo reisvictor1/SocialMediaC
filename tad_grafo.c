@@ -75,7 +75,7 @@ int crir_amizade(Grafo* g,int v1, int v2)
 
     	if (aux->v == v2)
     	{
-    		if (aux->amigos == 0)
+    		if (aux->amigos == 1)
     		{
     			printf("Você já tem essa pessoa como amigo!\n");
                 return 1;
@@ -238,7 +238,8 @@ void listaAmigos(Grafo* g, int v){
         printf("Você não tem amigos :/\n");
     }
     while(p){
-        printf("%s\n",g->v[p->v].nome);
+        if (p->amigos == 1)
+            printf("%s\n",g->v[p->v].nome);
         p = p->prox;
     }
     printf("\n");
