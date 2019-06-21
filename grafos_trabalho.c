@@ -31,6 +31,7 @@ int main(){
 
     Grafo* g = criaGrafo(num_vertices);
     le_arq_vertices(arq, g, num_vertices);
+    init_arestas(g);
     system("clear");
     int v;
     int id;
@@ -74,9 +75,9 @@ int main(){
                                     scanf(" %c",&op1);
                                     if((op1 == 'S') || (op1 == 's')){
                                         printf("Você fez amizade com esta pessoa\n");
-                                        criaAresta(g,id,v);
+                                        crir_amizade(g,id,v);
                                         if(v != id)
-                                            criaAresta(g,v,id);
+                                            crir_amizade(g,v,id);
                                     }else
                                     {
                                         printf("Você não fez amizade com esta pessoa\n");
@@ -92,8 +93,8 @@ int main(){
                                 printf("Quem você quer retirar?");
                                 scanf("%s",user);
                                 int v = verificaNome(g,user);
-                                desalocaAresta(g,id,v,0);
-                                desalocaAresta(g,v,id,0);
+                                desfazerAmizade(g, id, v, 0);
+                                desfazerAmizade(g,v,id, 0);
                                 break;
 
                             case 4:

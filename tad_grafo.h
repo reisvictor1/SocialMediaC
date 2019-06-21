@@ -21,3 +21,6 @@ void sugerir_amizade(Grafo *g, int usuario);
 float * dijkstra(Grafo *g, int inicio);
 void detectaFalsos(Grafo* g,int v1);
 char* encontrarParIdeal(Grafo* g,int v);
+void init_arestas(Grafo *g);
+int crir_amizade(Grafo* g,int v1, int v2);
+int desfazerAmizade(Grafo* g, int v1, int v2,int flag);

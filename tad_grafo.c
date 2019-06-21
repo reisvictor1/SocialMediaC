@@ -58,9 +58,9 @@ Grafo* criaGrafo(int v){
     return g;
 }
 
-int criaAresta(Grafo* g,int v1, int v2){
-
-    if(!g) return 1;
+int crir_amizade(Grafo* g,int v1, int v2)
+{
+	if(!g) return 1;
 
     if((v2 < 0) || (v2 >= g->num_vertices)) return 1;
     if((v1 < 0) || (v1 >= g->num_vertices)) return 1;
@@ -69,10 +69,43 @@ int criaAresta(Grafo* g,int v1, int v2){
         printf("Você está fazendo amizade com você mesmo!!\n");
         return 1;
     }
+    aresta * aux = g->v[v1].cav;
+
+    while(aux != NULL){
+
+    	if (aux->v == v2)
+    	{
+    		if (aux->amigos == 0)
+    		{
+    			printf("Você já tem essa pessoa como amigo!\n");
+                return 1;
+    		}
+    		aux->amigos = 1;
+    		return 0;
+    	}
+    	aux = aux->prox;
+    }
+
+    printf("Essa pessoa não pode ser encontrada, Verifique se o nome esta correto\n");
+    return 1
+
+}
+
+int criaAresta(Grafo* g,int v1, int v2){
+
+    if(!g) return 1;
+
+    if((v2 < 0) || (v2 >= g->num_vertices)) return 1;
+    if((v1 < 0) || (v1 >= g->num_vertices)) return 1;
+
+    if(v1 == v2){
+        printf("ligacao de dois vertices iguais!!\n");
+        return 1;
+    }
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
-    novo->amigos = -1;
+    novo->amigos = 0;//nao sao amigos
     novo->peso = geraPeso(g,v1,v2);
     printf("%.2f\n",1/(novo->peso));
     novo->prox = NULL;
@@ -86,7 +119,7 @@ int criaAresta(Grafo* g,int v1, int v2){
         Aresta *ant;
         while(p){
             if(p->v == v2){
-                printf("Você já tem essa pessoa como amigo!\n");
+                printf("Esses vertices ja estao ligados!\n");
                 return 1;
             }
             ant = p;
@@ -101,6 +134,34 @@ int criaAresta(Grafo* g,int v1, int v2){
     return 0;
 }
 
+int desfazerAmizade(Grafo* g, int v1, int v2,int flag){
+	Aresta *p, *aux;
+
+        if(!flag){
+            if(v1 == v2){
+                printf("Vejo que está com raiva de seu espírito interior!\n");
+                return 1;
+            }
+        }
+    
+    p = g->v[v1].cab;
+    aux = NULL;
+
+    while(p != NULL){
+        if(p->v == v2){
+        	if (p->amigos == 0)
+        	{
+        		printf("Putz... Você não sabe quem são seus amigos?\n");
+        	}
+        	p->amigos = 0;
+            return 0;
+        }
+	}
+
+    if(!flag)
+        printf("Putz... Você não sabe quem são seus amigos?\n");
+    return 1;
+}
 int desalocaAresta(Grafo* g, int v1, int v2,int flag){
 
     Aresta *p, *aux;
@@ -336,14 +397,36 @@ int saoAmigos(Grafo *g, int A, int B){
 	Aresta* aux = g->v[A].cab;
 
 	while(aux!= NULL){
-		if (aux->v == B)
-			return 1;//sao amigos
+		if (aux->v == B){
+			if (aux->amigos == 1)
+				return 1;//sao amigos
+			else
+				return 0;//nao sao amigos
+		}
 		aux = aux->prox;
 	}
 
 	return 0;//nao sao amigos
 }
 
+void init_arestas(Grafo *g){
+	int k = g->num_vertices;
+	int erro = 1;
+
+	for (int i = 0; i < k; i++)
+	{
+		for (int j = 0; j < k; j++)
+		{
+			if (i != j){
+				 erro = criaAresta(g,i, j);
+				 if (erro == 1){
+				 	printf("erro na criacao da aresta\n");
+				 	return;
+				 }
+			}
+		}
+	}
+}
 
 
 float * dijkstra(Grafo *g, int inicio)
@@ -448,8 +531,8 @@ void detectaFalsos(Grafo* g,int v1){
         amg = p->v;
         if((p != NULL)||(p->v != v1)){
             if(verificaCompatibilidade(g,v1,amg) <= 30.0){
-                desalocaAresta(g,v1,amg,1);
-                desalocaAresta(g,amg,v1,1);
+                desfazerAmizade(g, v1, amg, 1);
+                desfazerAmizade(g, amg, v1, 1);
                 return;
             }
         }
