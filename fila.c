@@ -44,32 +44,21 @@ void inserir(fila *f, no *n){
 	{
 		n->prox = NULL;
 		f->inicio = n;
-		f->tam++;
 	}
 
 	no *aux1;
 	no *aux2;
 
 	aux1 = f->inicio;
-	aux2 = aux1->prox;
-	if(aux1->prioridade > n->prioridade){
-		n->prox = aux1;
-		f->inicio = n;
-		f->tam++;
-		return;
+
+	while(aux1->prioridade < n->prioridade){
+
+		aux2 = aux1;
+		aux1 = aux1->prox;
 	}
 
-	while(aux2 != NULL){
-
-		if (n->prioridade < aux2->prioridade)
-			break;
-		
-		aux1 = aux2;
-		aux2 = aux2->prox;
-	}
-
-	aux1->prox = n;
-	n->prox = aux2;
+	n->prox = aux1;
+	aux2->prox = n;
 	f->tam++;
 }
 
@@ -95,8 +84,8 @@ void atualiza(fila *f, float *prioridades){
 		inserir(atualizada, aux);//insere o no na nova fila de prioridade com as distancias atualizadas
 
 		aux = f->inicio;//retira no do inicio da fila de prioridade antiga
-		if (f->inicio->prox != NULL)
-			f->inicio =aux->prox;//atualiza o inicio da fila de prioridade antiga
+		if (f->tam == 1)
+			f->inicio = aux->prox;//atualiza o inicio da fila de prioridade antiga
 	}
 
 	free(f);

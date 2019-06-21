@@ -5,6 +5,7 @@ typedef struct vertice Vertice;
 Grafo* criaGrafo(int v);
 int criaAresta(Grafo* g,int v1, int v2);
 int desalocaAresta(Grafo* g, int v1, int v2,int flag);
+int verificaIgualdade(Aresta* p,int id);
 void verificaNovosAmigos(Grafo *g, int id);
 void imprimeGrafo(Grafo* g);
 int verificaUser(Grafo* g, int user);

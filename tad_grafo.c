@@ -136,12 +136,22 @@ int desalocaAresta(Grafo* g, int v1, int v2,int flag){
     return 1;
 }
 
+int verificaIgualdade(Aresta* p, int id){
+    while(p){
+        if(id == p->v)
+            return 0;
+        p = p->prox;
+    }
+    return 1;
+}
+
 void verificaNovosAmigos(Grafo *g, int id){
     Aresta* p = g->v[id].cab;
     char op;
     if(p != NULL){
         while(p){
-            if((id != p->v) || (p != NULL)){
+            Aresta* amg = g->v[p->v].cab;
+            if(verificaIgualdade(amg,id)){
                 if(p->amigos == -1){
                     printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
                     scanf(" %c",&op);
@@ -372,8 +382,8 @@ float * dijkstra(Grafo *g, int inicio)
 
 			aux = aux->prox;
 		}
-
-		priori = atualiza(priori, distancia);
+        
+		atualiza(priori, distancia);
 		utilizado = atual;
 	}
 
