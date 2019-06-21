@@ -356,6 +356,7 @@ float * dijkstra(Grafo *g, int inicio)
 
 	while(vazia(priori) != 0){
 		atual = remover(priori);
+      
 		anterior[atual] = utilizado;
 
 		aux = g->v[atual].cab;
@@ -372,7 +373,7 @@ float * dijkstra(Grafo *g, int inicio)
 			aux = aux->prox;
 		}
 
-		atualiza(priori, distancia);
+		priori = atualiza(priori, distancia);
 		utilizado = atual;
 	}
 

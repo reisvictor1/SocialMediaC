@@ -44,6 +44,7 @@ void inserir(fila *f, no *n){
 	{
 		n->prox = NULL;
 		f->inicio = n;
+		f->tam++;
 	}
 
 	no *aux1;
@@ -89,6 +90,7 @@ void atualiza(fila *f, float *prioridades){
 	f->inicio = aux->prox;
 
 	while(aux != NULL){
+		printf("%d\n",aux->v);
 		aux->prioridade = prioridades[aux->v];
 		inserir(atualizada, aux);//insere o no na nova fila de prioridade com as distancias atualizadas
 
