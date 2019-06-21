@@ -5,7 +5,7 @@
 #include "fila.h"
 #include <math.h>
 #define MAX_VERTICES 10
-#define infinito 99999999999
+#define infinito 9999
 
 typedef struct aresta
 {
@@ -105,7 +105,7 @@ int criaAresta(Grafo* g,int v1, int v2){
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
-    novo->amigos = 0;//nao sao amigos
+    novo->amigos = -1;//nao sao amigos
     novo->peso = geraPeso(g,v1,v2);
     printf("%.2f\n",1/(novo->peso));
     novo->prox = NULL;
@@ -430,15 +430,30 @@ void init_arestas(Grafo *g){
 }
 
 
+float getP(Grafo * g, int v1, int v2)
+{
+	Aresta* aux = g->v[v1].cab;
+	while(aux != NULL){
+		if (aux->v == v2)
+		{
+			return aux->peso;
+		}
+		aux = aux->prox;
+	}
+
+	return 9999;
+}
+
 float * dijkstra(Grafo *g, int inicio)
 {
 	float *distancia = malloc(sizeof(float) * g->num_vertices);
 	int anterior[g->num_vertices];
 	fila *priori = cria_fila();//fila de prioridade
 
+	Aresta * aux;
 	for (int i = 0; i < g->num_vertices; i++)
 	{
-		distancia[i] = 99999999999;
+		distancia[i] = getP(g, inicio, i);
 		anterior[i] = -1;
 	}
 
@@ -446,7 +461,6 @@ float * dijkstra(Grafo *g, int inicio)
 	criar_no(priori, inicio, 0);
 	int utilizado = -1;
 	int atual;
-	Aresta * aux;
 
 	while(vazia(priori) != 0){
 		atual = remover(priori);
@@ -454,36 +468,34 @@ float * dijkstra(Grafo *g, int inicio)
 		anterior[atual] = utilizado;
 
 		aux = g->v[atual].cab;
+
 		while(aux != NULL){
 
-			if ((distancia[aux->v] > distancia[atual] + aux->peso) && (aux->v != inicio) && (anterior[aux->v] == -1))
+			if ((distancia[aux->v] > (distancia[atual] + aux->peso)) && (aux->v != inicio) && (anterior[aux->v] == -1))
 			{
+				distancia[aux->v] = distancia[atual] + aux->peso;
 				if (distancia[aux->v] ==  infinito)
 					criar_no(priori, aux->v, distancia[atual] + aux->peso);
-				
-				distancia[aux->v] = distancia[atual] + aux->peso;
 			}
 
 			aux = aux->prox;
 		}
         
-		atualiza(priori, distancia);
 		utilizado = atual;
 	}
 
-	liberaFila(priori);//da free na fila de prioridade
 	return distancia;
 }
 
 void sugerir_amizade(Grafo *g, int usuario){
 	
 	float * distancia = dijkstra(g, usuario);
-	float min = infinito;
+	float min = 9999.00;
 	int sugestao = -1;
     
 	for (int i = 0; i < g->num_vertices; i++)
 	{
-		if ((distancia[i] < min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
+		if ((distancia[i] <= min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
 		{
 			min = distancia[i];
 			printf("%f\n", min);
