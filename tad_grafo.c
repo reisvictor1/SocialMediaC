@@ -69,7 +69,7 @@ int crir_amizade(Grafo* g,int v1, int v2)
         printf("Você está fazendo amizade com você mesmo!!\n");
         return 1;
     }
-    aresta * aux = g->v[v1].cav;
+    Aresta * aux = g->v[v1].cab;
 
     while(aux != NULL){
 
@@ -87,7 +87,7 @@ int crir_amizade(Grafo* g,int v1, int v2)
     }
 
     printf("Essa pessoa não pode ser encontrada, Verifique se o nome esta correto\n");
-    return 1
+    return 1;
 
 }
 
@@ -135,7 +135,7 @@ int criaAresta(Grafo* g,int v1, int v2){
 }
 
 int desfazerAmizade(Grafo* g, int v1, int v2,int flag){
-	Aresta *p, *aux;
+	Aresta *p;
 
         if(!flag){
             if(v1 == v2){
@@ -145,7 +145,6 @@ int desfazerAmizade(Grafo* g, int v1, int v2,int flag){
         }
     
     p = g->v[v1].cab;
-    aux = NULL;
 
     while(p != NULL){
         if(p->v == v2){
@@ -156,6 +155,7 @@ int desfazerAmizade(Grafo* g, int v1, int v2,int flag){
         	p->amigos = 0;
             return 0;
         }
+        p = p->prox;
 	}
 
     if(!flag)
