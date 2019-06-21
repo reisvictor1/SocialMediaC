@@ -73,6 +73,8 @@ int criaAresta(Grafo* g,int v1, int v2){
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
     novo->amigos = 0;
+    novo->peso = geraPeso(g,v1,v2);
+    printf("%.2f\n",1/(novo->peso));
     novo->prox = NULL;
     
     if(!(g->v[v1].cab)){
@@ -325,53 +327,6 @@ int saoAmigos(Grafo *g, int A, int B){
 	return 0;//nao sao amigos
 }
 
-void sugerir_amizade(Grafo *g, int usuario){
-	
-	float * distancia = dijkstra(g, usuario);
-	float min = infinito;
-	int sugestao = -1;
-    
-	for (int i = 0; i < g->num_vertices; i++)
-	{
-		if ((distancia[i] < min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
-		{
-			min = distancia[i];
-			printf("%f\n", min);
-			sugestao = i;
-		}
-	}
-
-	if (sugestao >= 0)
-    {
-    	char opc;
-        printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
-        printf("Gostaria de torna-lo seu amigo?[S/N]\n");
-        scanf(" %c", &opc);
-        if (opc == 's' || opc == 'S')
-        {
-            criaAresta(g,usuario,sugestao);
-        }
-    }
-    else
-    {
-        printf("Não foi possivel encontrar um usuário compativel com você\n");
-    }
-
-}
-
-float verificaCompatibilidade(Grafo*g, int v1, int v2){
-    int total = 0;
-    total += verificaDiferenca(g,g->v[v1].idade,g->v[v2].idade);
-    if (g->v[v1].numA <= g->v[v2].numA)
-		total += getAmigoSimi(g,v1, v2);		
-	else
-		total += getAmigoSimi(g,v2, v1);
-
-    total+= 25;
-    
-    float p = 1/geraPeso(g,v1,v2);
-    return (p/(float) total)*100;
-}
 
 
 float * dijkstra(Grafo *g, int inicio)
@@ -417,3 +372,53 @@ float * dijkstra(Grafo *g, int inicio)
 	liberaFila(priori);//da free na fila de prioridade
 	return distancia;
 }
+
+void sugerir_amizade(Grafo *g, int usuario){
+	
+	float * distancia = dijkstra(g, usuario);
+	float min = infinito;
+	int sugestao = -1;
+    
+	for (int i = 0; i < g->num_vertices; i++)
+	{
+		if ((distancia[i] < min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
+		{
+			min = distancia[i];
+			printf("%f\n", min);
+			sugestao = i;
+		}
+	}
+
+	if (sugestao >= 0)
+    {
+    	char opc;
+        printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
+        printf("Gostaria de torna-lo seu amigo?[S/N]\n");
+        scanf(" %c", &opc);
+        if (opc == 's' || opc == 'S')
+        {
+            criaAresta(g,usuario,sugestao);
+        }
+    }
+    else
+    {
+        printf("Não foi possivel encontrar um usuário compativel com você\n");
+    }
+
+}
+
+float verificaCompatibilidade(Grafo*g, int v1, int v2){
+    int total = 0;
+    total += verificaDiferenca(g,g->v[v1].idade,g->v[v2].idade);
+    if (g->v[v1].numA <= g->v[v2].numA)
+		total += getAmigoSimi(g,v1, v2);		
+	else
+		total += getAmigoSimi(g,v2, v1);
+
+    total+= 25;
+    
+    float p = 1/geraPeso(g,v1,v2);
+    printf("Comp antes: %.2f\n",p);
+    return (p/(float) total)*100;
+}
+
