@@ -49,6 +49,7 @@ int main(){
                 scanf("%s",user);
                 id = verificaNome(g,user);
                 system("clear");
+                
                 if(verificaUser(g,id)){
                     verificaNovosAmigos(g,id);
                     do
@@ -67,19 +68,20 @@ int main(){
                                 printf("Com quem você quer fazer amizade?");
                                 scanf("%s",user);
                                 v = verificaNome(g,user);
-                                float comp = verificaCompatibilidade(g,id,v);
-                                printf("Você tem uma porcentagem de compatibilidade de %.2f com esta pessoa\nDeseja fazer amizade?(S/N)?\n ",comp);
-                                scanf(" %c",&op1);
-                                if((op1 == 'S') || (op1 == 's')){
-                                    printf("Você fez amizade com esta pessoa\n");
-                                    criaAresta(g,id,v);
-                                    if(v != id)
-                                        criaAresta(g,v,id);
-                                }else
-                                {
-                                    printf("Você não fez amizade com esta pessoa\n");
-                                }
-                                
+                                if(v >= 0){
+                                    float comp = verificaCompatibilidade(g,id,v);
+                                    printf("Você tem uma porcentagem de compatibilidade de %.2f com esta pessoa\nDeseja fazer amizade?(S/N)?\n ",comp);
+                                    scanf(" %c",&op1);
+                                    if((op1 == 'S') || (op1 == 's')){
+                                        printf("Você fez amizade com esta pessoa\n");
+                                        criaAresta(g,id,v);
+                                        if(v != id)
+                                            criaAresta(g,v,id);
+                                    }else
+                                    {
+                                        printf("Você não fez amizade com esta pessoa\n");
+                                    }
+                                } 
                                 break;
                             case 2:
 
@@ -95,7 +97,9 @@ int main(){
                                 break;
 
                             case 4:
+
                                 detectaFalsos(g,id);
+                    
                                 break;
                             case 5:
 

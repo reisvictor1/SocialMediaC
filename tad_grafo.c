@@ -72,7 +72,7 @@ int criaAresta(Grafo* g,int v1, int v2){
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
-    novo->amigos = 0;
+    novo->amigos = -1;
     novo->peso = geraPeso(g,v1,v2);
     printf("%.2f\n",1/(novo->peso));
     novo->prox = NULL;
@@ -105,9 +105,11 @@ int desalocaAresta(Grafo* g, int v1, int v2,int flag){
 
     Aresta *p, *aux;
 
-        if(v1 == v2 || !flag){
-            printf("Vejo que está com raiva de seu espírito interior!\n");
-            return 1;
+        if(!flag){
+            if(v1 == v2){
+                printf("Vejo que está com raiva de seu espírito interior!\n");
+                return 1;
+            }
         }
     
     p = g->v[v1].cab;
@@ -115,12 +117,13 @@ int desalocaAresta(Grafo* g, int v1, int v2,int flag){
 
     while(p != NULL){
         if(p->v == v2){
-            p->amigos = 0;
+        
             if(p == g->v[v1].cab){
                 g->v[v1].cab = g->v[v1].cab->prox;
             }else{
                 aux->prox = p->prox;
             }
+
             free(p);
             return 0;
         }
@@ -139,7 +142,7 @@ void verificaNovosAmigos(Grafo *g, int id){
     if(p != NULL){
         while(p){
             if((id != p->v) || (p != NULL)){
-                if(p->amigos == 0){
+                if(p->amigos == -1){
                     printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
                     scanf(" %c",&op);
                     if(op == 's' || op == 'S'){
@@ -429,12 +432,13 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2){
 void detectaFalsos(Grafo* g,int v1){
 
     Aresta* p = g->v[v1].cab;
-
+    int amg;
     while(p){
+        amg = p->v;
         if((p != NULL)||(p->v != v1)){
-            if(verificaCompatibilidade(g,v1,p->v) <= 30.0){
-                desalocaAresta(g,v1,g->v[p->v].v,1);
-                desalocaAresta(g,g->v[p->v].v,v1,1);
+            if(verificaCompatibilidade(g,v1,amg) <= 30.0){
+                desalocaAresta(g,v1,amg,1);
+                desalocaAresta(g,amg,v1,1);
                 return;
             }
         }
