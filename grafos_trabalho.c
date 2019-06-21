@@ -7,6 +7,7 @@ int main(){
 
     int num_vertices;
     char nome[50];
+    char aux[3];
     FILE * arq;
     printf("Insira o nome do bando de dados desejado!\n");
     scanf("%s", nome);
@@ -19,6 +20,9 @@ int main(){
     }
 
     fscanf(arq,"%d", &num_vertices);
+    fscanf(arq,"%[\r]s",aux);
+    
+
     if (num_vertices <= 0)//arquivo invalido
     {
         printf("Erro: FALHA NO PROCESSAMENTO DO ARQUIVO\n");
@@ -44,11 +48,14 @@ int main(){
                 printf("Qual é o seu usuário?\n");
                 scanf("%s",user);
                 id = verificaNome(g,user);
-               system("clear");
+                system("clear");
+                
                 if(verificaUser(g,id)){
+                    verificaNovosAmigos(g,id);
                     do
                     {
-                        printf("Quais das opções você quer?\n0)Listar seus amigos\n1) Fazer amizade\n2) Sugerir Amizade\n3) Detectar amizade falsa\n4) Encontrar namorado(a) ideal\n5)Sair\n");
+
+                        printf("Quais das opções você quer?\n0)Listar seus amigos\n1) Fazer amizade\n2) Sugerir Amizade\n3) Desfazer amizade\n4) Detectar amizade falsa\n5) Encontrar namorado(a) ideal\n6)Sair\n");
                         scanf("%d",&op2);
                         system("clear");
                         switch(op2){
@@ -59,32 +66,49 @@ int main(){
                             case 1:
                                
                                 printf("Com quem você quer fazer amizade?");
-                                scanf("%d",&v);
-                                criaAresta(g,id,v);
-                                
+                                scanf("%s",user);
+                                v = verificaNome(g,user);
+                                if(v >= 0){
+                                    float comp = verificaCompatibilidade(g,id,v);
+                                    printf("Você tem uma porcentagem de compatibilidade de %.2f com esta pessoa\nDeseja fazer amizade?(S/N)?\n ",comp);
+                                    scanf(" %c",&op1);
+                                    if((op1 == 'S') || (op1 == 's')){
+                                        printf("Você fez amizade com esta pessoa\n");
+                                        criaAresta(g,id,v);
+                                        if(v != id)
+                                            criaAresta(g,v,id);
+                                    }else
+                                    {
+                                        printf("Você não fez amizade com esta pessoa\n");
+                                    }
+                                } 
                                 break;
                             case 2:
 
                                 sugerir_amizade(g, id);
-                                system("clear");
+                              
                                 break;
                             case 3:
                                 printf("Quem você quer retirar?");
-                                scanf("%d",&v);
-                                desalocaAresta(g,id,v);
-                                system("clear");
+                                scanf("%s",user);
+                                int v = verificaNome(g,user);
+                                desalocaAresta(g,id,v,0);
+                                desalocaAresta(g,v,id,0);
                                 break;
+
                             case 4:
 
+                                detectaFalsos(g,id);
+                    
+                                break;
+                            case 5:
 
-                                system("clear");
+                                printf("Seu par ideal é %s\n",encontrarParIdeal(g,id));
                                 break;
                         }
 
-                    }while (op2 < 5);
+                    }while (op2 < 6);
                     
-                }else{
-                    printf("Esse usuário não existe!!\n");
                 }
 
                 break;    

@@ -9,7 +9,7 @@ fila * cria_fila();
 void criar_no(fila * f, int v, float priori);
 void inserir(fila *f, no *n);
 int remover(fila *f);
-void atualiza(fila *f, float *prioridaes);
+void atualiza(fila *f, float *prioridades);
 void liberaFila(fila *f);
 
 #endif

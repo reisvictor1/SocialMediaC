@@ -72,6 +72,9 @@ int criaAresta(Grafo* g,int v1, int v2){
 
     Aresta* novo = (Aresta*) malloc(sizeof(Aresta));
     novo->v = v2;
+    novo->amigos = -1;
+    novo->peso = geraPeso(g,v1,v2);
+    printf("%.2f\n",1/(novo->peso));
     novo->prox = NULL;
     
     if(!(g->v[v1].cab)){
@@ -98,24 +101,26 @@ int criaAresta(Grafo* g,int v1, int v2){
     return 0;
 }
 
-int desalocaAresta(Grafo* g, int v1, int v2){
+int desalocaAresta(Grafo* g, int v1, int v2,int flag){
 
-    Aresta* p = g->v[v1].cab;
-    Aresta* aux = NULL;
+    Aresta *p, *aux;
 
-    if(v1 == v2){
-        printf("Vejo que está com raiva de seu espírito interior!\n");
-        return 1;
-    }
-
-    while(p){
-
-        if(p->v == v2){
-
-            if(p == g->v[v1].cab){
-                g->v[v1].cab = NULL;
+        if(!flag){
+            if(v1 == v2){
+                printf("Vejo que está com raiva de seu espírito interior!\n");
+                return 1;
             }
-            else{
+        }
+    
+    p = g->v[v1].cab;
+    aux = NULL;
+
+    while(p != NULL){
+        if(p->v == v2){
+        
+            if(p == g->v[v1].cab){
+                g->v[v1].cab = g->v[v1].cab->prox;
+            }else{
                 aux->prox = p->prox;
             }
 
@@ -126,14 +131,51 @@ int desalocaAresta(Grafo* g, int v1, int v2){
         aux = p;
         p = p->prox;
     }
-
-    printf("Putz... Você não sabe quem são seus amigos?\n");
+    if(!flag)
+        printf("Putz... Você não sabe quem são seus amigos?\n");
     return 1;
+}
+
+int verificaIgualdade(Aresta* p, int id){
+    while(p){
+        if(id == p->v)
+            return 0;
+        p = p->prox;
+    }
+    return 1;
+}
+
+void verificaNovosAmigos(Grafo *g, int id){
+    Aresta* p = g->v[id].cab;
+    char op;
+    if(p != NULL){
+        while(p){
+            Aresta* amg = g->v[p->v].cab;
+            if(verificaIgualdade(amg,id)){
+                if(p->amigos == -1){
+                    printf("Você quer ser amigo com %s?(S/N)\n",g->v[p->v].nome);
+                    scanf(" %c",&op);
+                    if(op == 's' || op == 'S'){
+                        p->amigos = 1;
+                    }
+                    else{
+                        desalocaAresta(g,id,p->v,1);
+                        desalocaAresta(g,p->v,id,1);
+                    }
+
+                }
+            }
+            p = p->prox;
+        }
+    }
 }
 
 void listaAmigos(Grafo* g, int v){
     printf("Seus amigos são:\n");
     Aresta *p = g->v[v].cab;
+    if(!p){
+        printf("Você não tem amigos :/\n");
+    }
     while(p){
         printf("%s\n",g->v[p->v].nome);
         p = p->prox;
@@ -158,10 +200,14 @@ void imprimeGrafo(Grafo* g){
 int verificaNome(Grafo* g,char* nome){
    
     for(int i = 0; i< g->num_vertices; i++){
-        if(strcmp(g->v[i].nome,nome) == 0)
+        
+        if(strcmp(g->v[i].nome,nome) == 0){
+           
             return i;
+        }
+            
     }
-    printf("Não existe ninguém com este nome na rede");
+    printf("Não existe ninguém com este nome na rede.\n");
     return -1;
 }
 
@@ -298,6 +344,53 @@ int saoAmigos(Grafo *g, int A, int B){
 	return 0;//nao sao amigos
 }
 
+
+
+float * dijkstra(Grafo *g, int inicio)
+{
+	float *distancia = malloc(sizeof(float) * g->num_vertices);
+	int anterior[g->num_vertices];
+	fila *priori = cria_fila();//fila de prioridade
+
+	for (int i = 0; i < g->num_vertices; i++)
+	{
+		distancia[i] = 99999999999;
+		anterior[i] = -1;
+	}
+
+	distancia[inicio] = 0;
+	criar_no(priori, inicio, 0);
+	int utilizado = -1;
+	int atual;
+	Aresta * aux;
+
+	while(vazia(priori) != 0){
+		atual = remover(priori);
+      
+		anterior[atual] = utilizado;
+
+		aux = g->v[atual].cab;
+		while(aux != NULL){
+
+			if ((distancia[aux->v] > distancia[atual] + aux->peso) && (aux->v != inicio) && (anterior[aux->v] == -1))
+			{
+				if (distancia[aux->v] ==  infinito)
+					criar_no(priori, aux->v, distancia[atual] + aux->peso);
+				
+				distancia[aux->v] = distancia[atual] + aux->peso;
+			}
+
+			aux = aux->prox;
+		}
+        
+		atualiza(priori, distancia);
+		utilizado = atual;
+	}
+
+	liberaFila(priori);//da free na fila de prioridade
+	return distancia;
+}
+
 void sugerir_amizade(Grafo *g, int usuario){
 	
 	float * distancia = dijkstra(g, usuario);
@@ -306,7 +399,7 @@ void sugerir_amizade(Grafo *g, int usuario){
     
 	for (int i = 0; i < g->num_vertices; i++)
 	{
-		if ((distancia[i] < min) && i != usuario && (saoAmigos(g, usuario, i) == 0))
+		if ((distancia[i] < min) && (i != usuario) && (saoAmigos(g, usuario, i) == 0))
 		{
 			min = distancia[i];
 			printf("%f\n", min);
@@ -314,12 +407,12 @@ void sugerir_amizade(Grafo *g, int usuario){
 		}
 	}
 
-	if (sugestao <= 0)
+	if (sugestao >= 0)
     {
     	char opc;
         printf("Parece que %s é compativel com você.\n", g->v[sugestao].nome);
         printf("Gostaria de torna-lo seu amigo?[S/N]\n");
-        scanf("%c", &opc);
+        scanf(" %c", &opc);
         if (opc == 's' || opc == 'S')
         {
             criaAresta(g,usuario,sugestao);
@@ -343,50 +436,43 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2){
     total+= 25;
     
     float p = 1/geraPeso(g,v1,v2);
+    printf("Comp antes: %.2f\n",p);
     return (p/(float) total)*100;
 }
 
+void detectaFalsos(Grafo* g,int v1){
 
-float * dijkstra(Grafo *g, int inicio)
-{
-	float *distancia = malloc(sizeof(float) * g->num_vertices);
-	int anterior[g->num_vertices];
-	fila *priori = cria_fila();//fila de prioridade
+    Aresta* p = g->v[v1].cab;
+    int amg;
+    while(p){
+        amg = p->v;
+        if((p != NULL)||(p->v != v1)){
+            if(verificaCompatibilidade(g,v1,amg) <= 30.0){
+                desalocaAresta(g,v1,amg,1);
+                desalocaAresta(g,amg,v1,1);
+                return;
+            }
+        }
+        p = p->prox;
+    }
 
-	for (int i = 0; i < g->num_vertices; i++)
-	{
-		distancia[i] = 99999999999;
-		anterior[i] = -1;
-	}
+}
 
-	distancia[inicio] = 0;
-	criar_no(priori, inicio, 0);
-	int utilizado = -1;
-	int atual;
-	Aresta * aux;
 
-	while(vazia(priori) != 0){
-		atual = remover(priori);
-		anterior[atual] = utilizado;
+char* encontrarParIdeal(Grafo* g,int v){
 
-		aux = g->v[atual].cab;
-		while(aux != NULL){
+    int namo;
+    float maior = 0,comp;
+    Aresta *p = g->v[v].cab;
+    
+    while(p){
+        comp = verificaCompatibilidade(g,v,g->v[p->v].v);
+        if(comp > maior){
+            namo = p->v;
+            maior = comp;
+        }
+        p = p->prox;
+    }
 
-			if ((distancia[aux->v] > distancia[atual] + aux->peso) && (aux->v != inicio) && (anterior[aux->v] == -1))
-			{
-				if (distancia[aux->v] ==  infinito)
-					criar_no(priori, aux->v, distancia[atual] + aux->peso);
-				
-				distancia[aux->v] = distancia[atual] + aux->peso;
-			}
-
-			aux = aux->prox;
-		}
-
-		atualiza(priori, distancia);
-		utilizado = atual;
-	}
-
-	liberaFila(priori);//da free na fila de prioridade
-	return distancia;
+    return g->v[namo].nome;
 }
