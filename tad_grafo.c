@@ -422,3 +422,36 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2){
     return (p/(float) total)*100;
 }
 
+void detectaFalsos(Grafo* g,int v1){
+
+    Aresta* p = g->v[v1].cab;
+
+    while(p){
+        if(verificaCompatibilidade(g,v1,p->v) <= 30.0){
+            desalocaAresta(g,v1,g->v[p->v].v);
+            desalocaAresta(g,g->v[p->v].v,v1);
+            return;
+        }
+        p = p->prox;
+    }
+
+}
+
+
+char* encontrarParIdeal(Grafo* g,int v){
+
+    int namo;
+    float maior = 0,comp;
+    Aresta *p = g->v[v].cab;
+    
+    while(p){
+        comp = verificaCompatibilidade(g,v,g->v[p->v].v);
+        if(comp > maior){
+            namo = p->v;
+            maior = comp;
+        }
+        p = p->prox;
+    }
+
+    return g->v[namo].nome;
+}

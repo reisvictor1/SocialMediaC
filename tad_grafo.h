@@ -18,3 +18,5 @@ float verificaCompatibilidade(Grafo*g, int v1, int v2);
 int verificaDiferenca(Grafo* g, int n1, int n2);
 void sugerir_amizade(Grafo *g, int usuario);
 float * dijkstra(Grafo *g, int inicio);
+void detectaFalsos(Grafo* g,int v1);
+char* encontrarParIdeal(Grafo* g,int v);

@@ -91,15 +91,15 @@ int main(){
                                 scanf("%s",user);
                                 int v = verificaNome(g,user);
                                 desalocaAresta(g,id,v);
-                                
+                                desalocaAresta(g,v,id);
                                 break;
 
                             case 4:
-                                
+                                detectaFalsos(g,id);
                                 break;
                             case 5:
 
-
+                                printf("Seu par ideal é %s\n",encontrarParIdeal(g,id));
                                 break;
                         }
 
